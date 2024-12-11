@@ -23,23 +23,49 @@ public class Ex1 {
      */
     public static int number2Int(String s) {
         if (s == null || s.isEmpty()) {
-            return -1; // Return -1 for null or empty strings
+            return -1; // Return -1 for null or empty input
+        }
+    
+        if (!s.contains("b")) {
+            // Assume it's a base-10 number if no delimiter is present
+            try {
+                for (char c : s.toCharArray()) {
+                    if (!Character.isDigit(c) && (c < 'A' || c > 'F')) {
+                        return -1; // Ensure it's a valid base-10 representation
+                    }
+                }
+                return Integer.parseInt(s, 10);
+            } catch (NumberFormatException e) {
+                return -1;
+            }
         }
     
         try {
-            // If the string contains a base indicator like "b2", handle it appropriately
-            if (s.contains("b")) {
-                String[] parts = s.split("b");
-                int base = Integer.parseInt(parts[1]); // Get the base
-                return Integer.parseInt(parts[0], base); // Parse the number with the base
+            String[] parts = s.split("b");
+            if (parts.length != 2) return -1;
+    
+            String numberPart = parts[0];
+            String basePart = parts[1];
+    
+            // Parse base
+            int base = Character.isDigit(basePart.charAt(0))
+                ? Integer.parseInt(basePart)
+                : basePart.charAt(0) - 'A' + 10;
+    
+            if (base < 2 || base > 16) return -1;
+    
+            // Parse number in the given base
+            for (char c : numberPart.toCharArray()) {
+                int value = Character.isDigit(c) ? c - '0' : c - 'A' + 10;
+                if (value >= base) return -1; // Ensure digits are valid for the base
             }
-            // Otherwise, parse it as a standard decimal number
-            return Integer.parseInt(s);
-        } catch (NumberFormatException e) {
-            // Return -1 for any invalid number
-            return -1;
+    
+            return Integer.parseInt(numberPart, base);
+        } catch (Exception e) {
+            return -1; // Return -1 for any parsing errors
         }
     }
+    
     
 
     
