@@ -14,6 +14,8 @@ public class Ex1Test {
 
     @Test
     void computeNumberTest() {
+        String sEmpty="";      
+        assertEquals(Ex1.number2Int(sEmpty), -1);
         String s2 = "1011b2";
         int v = Ex1.number2Int(s2);
         assertEquals(v, 11);
@@ -23,6 +25,7 @@ public class Ex1Test {
         int v2 = Ex1.number2Int(s2);
         assertEquals(v, v2);
         assertTrue(Ex1.equals(s10, s2));
+       
     }
 
     @Test
@@ -30,12 +33,13 @@ public class Ex1Test {
         String[] good = {"1", "1b2", "01b2", "123bA", "ABbG", "0bA"};
         for (int i = 0; i < good.length; i = i + 1) {
             boolean ok = Ex1.isNumber(good[i]);
-            assertTrue(ok);
+            assertTrue(ok,"checking"+ good[i]);
+
         }
         String[] not_good = {"b2", "2b2", "1G3bG", " BbG", "0bbA", "abB", "!@b2", "A", "1bb2"};
         for (int i = 0; i < not_good.length; i = i + 1) {
             boolean not_ok = Ex1.isNumber(not_good[i]);
-            assertFalse(not_ok);
+            assertFalse(not_ok,"checking"+ not_good[i]);
         }
     }
 

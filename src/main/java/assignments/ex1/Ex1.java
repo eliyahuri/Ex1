@@ -22,12 +22,24 @@ public class Ex1 {
      * @return
      */
     public static int number2Int(String num) {
-        int ans = -1;
-        // add your code here
-
-        ////////////////////
-        return ans;
+        if (num == null || num.isEmpty() || !isNumber(num)) {
+            return -1;
+        }
+        if(!num.contains("b")){
+            return Integer.parseInt(num);
+        }
+        String[] parts = num.split("b");
+        String numberPart = parts[0];
+        String basePart = parts[1];
+        int base = Character.isDigit(basePart.charAt(0)) ? Integer.parseInt(basePart) : basePart.charAt(0) - 'A' + 10;
+    
+        try {
+            return Integer.parseInt(numberPart, base);
+        } catch (NumberFormatException e) {
+            return -1;
+        }
     }
+    
 
     /**
      * This static function checks if the given String (g) is in a valid
@@ -37,12 +49,40 @@ public class Ex1 {
      * @return true iff the given String is in a number format
      */
     public static boolean isNumber(String a) {
-        boolean ans = true;
-        // add your code here
+        if (a == null || a.isEmpty()) {
+            return false;
+        }
+   
+        if(!a.contains("b")) {
+            return true;
+        }
+        String[] parts = a.split("b");
+        if (parts.length != 2) {
+            return false;
+        }
+        String numberPart = parts[0];
+        String basePart = parts[1];
+        if(numberPart.isEmpty() || basePart.isEmpty()){
+            return false;
+        }
 
-        ////////////////////
-            return ans;
+        // Validate base
+        int base = Character.isDigit(basePart.charAt(0)) ? Integer.parseInt(basePart) : basePart.charAt(0) - 'A' + 10;
+        if (base < 2 || base > 16) {
+            return false;
+        }
+    
+        // Validate number part
+        for (char c : numberPart.toCharArray()) {
+            int value = Character.isDigit(c) ? c - '0' : c - 'A' + 10;
+            if (value >= base) {
+                return false;
+            }
+        }
+        return true;
     }
+    
+    
 
     /**
      * Calculate the number representation (in basis base) of the given natural
@@ -55,12 +95,18 @@ public class Ex1 {
      * to num, or an empty String (in case of wrong input).
      */
     public static String int2Number(int num, int base) {
-        String ans = "";
-        // add your code here
-
-        ////////////////////
-            return ans;
+        if (num < 0 || base < 2 || base > 16) {
+            return "";
+        }
+        StringBuilder result = new StringBuilder();
+        while (num > 0) {
+            int remainder = num % base;
+            result.append(remainder < 10 ? (char) (remainder + '0') : (char) (remainder - 10 + 'A'));
+            num /= base;
+        }
+        return result.reverse().toString() + "b" + (base < 10 ? base : (char) ('A' + base - 10));
     }
+    
 
     /**
      * Checks if the two numbers have the same value.
@@ -70,12 +116,9 @@ public class Ex1 {
      * @return true iff the two numbers have the same values.
      */
     public static boolean equals(String n1, String n2) {
-        boolean ans = true;
-        // add your code here
-
-        ////////////////////
-            return ans;
+        return number2Int(n1) == number2Int(n2);
     }
+    
 
     /**
      * This static function search for the array index with the largest number
@@ -88,7 +131,17 @@ public class Ex1 {
      *
      */
     public static int maxIndex(String[] arr) {
-        int ans = 0; // the index of the maximum number
-        return ans;
+        int maxIndex = -1;
+        int maxValue = -1;
+    
+        for (int i = 0; i < arr.length; i++) {
+            int value = number2Int(arr[i]);
+            if (value > maxValue) {
+                maxValue = value;
+                maxIndex = i;
+            }
+        }
+        return maxIndex;
     }
+    
 }
