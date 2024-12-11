@@ -67,7 +67,7 @@ public class Ex1 {
                             }}
 
             return Integer.parseInt(numberPart, base);
-        } catch (Exception e) {
+        } catch (NumberFormatException e) {
             return -1; // Return -1 for any parsing errors
         }
     }
