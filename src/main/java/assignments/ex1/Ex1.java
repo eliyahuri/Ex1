@@ -21,39 +21,41 @@ public class Ex1 {
      * @param num a String representing a number in basis [2,16]
      * @return
      */
-    public static int number2Int(String num) {
-        if (num == null || num.isEmpty() || !isNumber(num)) {
-            return -1;
+    public static int number2Int(String s) {
+        if (s == null || s.isEmpty()) {
+            return -1; // Return -1 for null or empty strings
         }
-        if(!num.contains("b")){
-            return Integer.parseInt(num);
-        }
-        String[] parts = num.split("b");
-        String numberPart = parts[0];
-        String basePart = parts[1];
-        int base = Character.isDigit(basePart.charAt(0)) ? Integer.parseInt(basePart) : basePart.charAt(0) - 'A' + 10;
     
         try {
-            return Integer.parseInt(numberPart, base);
+            // If the string contains a base indicator like "b2", handle it appropriately
+            if (s.contains("b")) {
+                String[] parts = s.split("b");
+                int base = Integer.parseInt(parts[1]); // Get the base
+                return Integer.parseInt(parts[0], base); // Parse the number with the base
+            }
+            // Otherwise, parse it as a standard decimal number
+            return Integer.parseInt(s);
         } catch (NumberFormatException e) {
+            // Return -1 for any invalid number
             return -1;
         }
     }
     
 
+    
     /**
      * This static function checks if the given String (g) is in a valid
      * "number" format.
      *
      * @param a a String representing a number
-     * @return true iff the given String is in a number format
+     * @return true if the given String is in a number format
      */
     public static boolean isNumber(String a) {
         if (a == null || a.isEmpty()) {
             return false;
         }
-   
-        if(!a.contains("b")) {
+
+        if (!a.contains("b")) {
             return true;
         }
         String[] parts = a.split("b");
@@ -62,7 +64,7 @@ public class Ex1 {
         }
         String numberPart = parts[0];
         String basePart = parts[1];
-        if(numberPart.isEmpty() || basePart.isEmpty()){
+        if (numberPart.isEmpty() || basePart.isEmpty()) {
             return false;
         }
 
@@ -71,7 +73,7 @@ public class Ex1 {
         if (base < 2 || base > 16) {
             return false;
         }
-    
+
         // Validate number part
         for (char c : numberPart.toCharArray()) {
             int value = Character.isDigit(c) ? c - '0' : c - 'A' + 10;
@@ -81,8 +83,6 @@ public class Ex1 {
         }
         return true;
     }
-    
-    
 
     /**
      * Calculate the number representation (in basis base) of the given natural
@@ -98,13 +98,16 @@ public class Ex1 {
         if (num < 0 || base < 2 || base > 16) {
             return "";
         }
+        if (num == 0) {
+            return "0b" + base; // Handle the case for 0 explicitly
+        }
         StringBuilder result = new StringBuilder();
         while (num > 0) {
             int remainder = num % base;
             result.append(remainder < 10 ? (char) (remainder + '0') : (char) (remainder - 10 + 'A'));
             num /= base;
         }
-        return result.reverse().toString() + "b" + (base < 10 ? base : (char) ('A' + base - 10));
+        return result.reverse().toString() + "b" + base;
     }
     
 
@@ -118,7 +121,6 @@ public class Ex1 {
     public static boolean equals(String n1, String n2) {
         return number2Int(n1) == number2Int(n2);
     }
-    
 
     /**
      * This static function search for the array index with the largest number
@@ -132,16 +134,22 @@ public class Ex1 {
      */
     public static int maxIndex(String[] arr) {
         int maxIndex = -1;
-        int maxValue = -1;
+        Integer maxValue = null;
     
         for (int i = 0; i < arr.length; i++) {
             int value = number2Int(arr[i]);
-            if (value > maxValue) {
+            // Skip invalid values (e.g., number2Int returns -1 for invalid numbers)
+            if (value == -1 && !arr[i].equals("-1")) {
+                continue;
+            }
+            // Update maxIndex and maxValue if we find a new maximum
+            if (maxValue == null || value > maxValue) {
                 maxValue = value;
                 maxIndex = i;
             }
         }
         return maxIndex;
     }
+    
     
 }

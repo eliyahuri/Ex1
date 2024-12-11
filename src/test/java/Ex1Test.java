@@ -39,13 +39,36 @@ public class Ex1Test {
         String[] not_good = {"b2", "2b2", "1G3bG", " BbG", "0bbA", "abB", "!@b2", "A", "1bb2"};
         for (int i = 0; i < not_good.length; i = i + 1) {
             boolean not_ok = Ex1.isNumber(not_good[i]);
-            assertFalse(not_ok,"checking"+ not_good[i]);
+            assertFalse(not_ok,"checking: "+ not_good[i]);
         }
     }
 
     @Test
     void int2NumberTest() {
-        // implement this test
+        // Test valid conversions
+        assertEquals("1010b2", Ex1.int2Number(10, 2));
+        assertEquals("12b8", Ex1.int2Number(10, 8));
+        assertEquals("Ab16", Ex1.int2Number(10, 16));
+        assertEquals("101b3", Ex1.int2Number(10, 3));
+
+        // Test edge cases
+        assertEquals("0b2", Ex1.int2Number(0, 2));
+        assertEquals("1b2", Ex1.int2Number(1, 2));
+        assertEquals("1b8", Ex1.int2Number(1, 8));
+        assertEquals("1b16", Ex1.int2Number(1, 16));
+
+        // Test invalid inputs
+        assertEquals("", Ex1.int2Number(-10, 2));
+        assertEquals("", Ex1.int2Number(10, 1));
+        assertEquals("", Ex1.int2Number(10, 17));
+
+        // Test boundary bases
+        assertEquals("1101b2", Ex1.int2Number(13, 2));
+        assertEquals("Db16", Ex1.int2Number(13, 16));
+
+        // Test large numbers
+        assertEquals("1111111111111111111111111111111b2", Ex1.int2Number(Integer.MAX_VALUE, 2));
+        assertEquals("7FFFFFFFb16", Ex1.int2Number(Integer.MAX_VALUE, 16));
     }
 
     @Test
