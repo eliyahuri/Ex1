@@ -23,11 +23,11 @@ public class Ex1 {
      */
     public static int number2Int(String s) {
         if (s == null || s.isEmpty()) {
-            return -1; // Return -1 for null or empty input
+            return -1; // Invalid input
         }
-    
+
         if (!s.contains("b")) {
-            // Assume it's a base-10 number if no delimiter is present
+            // Assume base-10 if no delimiter is present
             try {
                 for (char c : s.toCharArray()) {
                     if (!Character.isDigit(c) && (c < 'A' || c > 'F')) {
@@ -36,39 +36,42 @@ public class Ex1 {
                 }
                 return Integer.parseInt(s, 10);
             } catch (NumberFormatException e) {
-                return -1;
+                return -1; // Handle invalid cases
             }
         }
-    
+
         try {
             String[] parts = s.split("b");
-            if (parts.length != 2) return -1;
-    
+            if (parts.length != 2) {
+                return -1;
+            }
+
             String numberPart = parts[0];
             String basePart = parts[1];
-    
+
             // Parse base
             int base = Character.isDigit(basePart.charAt(0))
-                ? Integer.parseInt(basePart)
-                : basePart.charAt(0) - 'A' + 10;
-    
-            if (base < 2 || base > 16) return -1;
-    
+                    ? Integer.parseInt(basePart)
+                    : basePart.charAt(0) - 'A' + 10;
+
+            if (base < 2 || base > 16) {
+                return -1;
+            }
+
             // Parse number in the given base
             for (char c : numberPart.toCharArray()) {
                 int value = Character.isDigit(c) ? c - '0' : c - 'A' + 10;
-                if (value >= base) return -1; // Ensure digits are valid for the base
-            }
-    
+                if (value >= base) {
+                    return -1; // Ensure digits are valid for the base
+
+                            }}
+
             return Integer.parseInt(numberPart, base);
         } catch (Exception e) {
             return -1; // Return -1 for any parsing errors
         }
     }
-    
-    
 
-    
     /**
      * This static function checks if the given String (g) is in a valid
      * "number" format.
@@ -80,12 +83,12 @@ public class Ex1 {
         if (a == null || a.isEmpty()) {
             return false;
         }
-    
+
         // Check for leading spaces
         if (Character.isWhitespace(a.charAt(0))) {
             return false;
         }
-    
+
         if (!a.contains("b")) {
             // Check if it's a valid standalone number
             for (char c : a.toCharArray()) {
@@ -95,33 +98,33 @@ public class Ex1 {
             }
             return true;
         }
-    
+
         String[] parts = a.split("b");
         if (parts.length != 2) {
             return false;
         }
-    
+
         String numberPart = parts[0];
         String basePart = parts[1];
-    
+
         if (numberPart.isEmpty() || basePart.isEmpty()) {
             return false;
         }
-    
+
         // Validate base
         int base;
         try {
             base = Character.isDigit(basePart.charAt(0))
-                ? Integer.parseInt(basePart)
-                : basePart.charAt(0) - 'A' + 10;
+                    ? Integer.parseInt(basePart)
+                    : basePart.charAt(0) - 'A' + 10;
         } catch (NumberFormatException e) {
             return false;
         }
-    
+
         if (base < 2 || base > 16) {
             return false;
         }
-    
+
         // Validate number part
         for (char c : numberPart.toCharArray()) {
             if (!Character.isLetterOrDigit(c)) {
@@ -132,12 +135,9 @@ public class Ex1 {
                 return false;
             }
         }
-    
+
         return true;
     }
-    
-    
-    
 
     /**
      * Calculate the number representation (in basis base) of the given natural
@@ -164,7 +164,6 @@ public class Ex1 {
         }
         return result.reverse().toString() + "b" + base;
     }
-    
 
     /**
      * Checks if the two numbers have the same value.
@@ -174,6 +173,10 @@ public class Ex1 {
      * @return true iff the two numbers have the same values.
      */
     public static boolean equals(String n1, String n2) {
+        if (!isNumber(n1) || !isNumber(n2)) {
+            return false; // Ensure both inputs are valid numbers
+        }
+        System.out.println(number2Int(n1) + " " + number2Int(n2));
         return number2Int(n1) == number2Int(n2);
     }
 
@@ -190,7 +193,7 @@ public class Ex1 {
     public static int maxIndex(String[] arr) {
         int maxIndex = -1;
         Integer maxValue = null;
-    
+
         for (int i = 0; i < arr.length; i++) {
             int value = number2Int(arr[i]);
             // Skip invalid values (e.g., number2Int returns -1 for invalid numbers)
@@ -205,6 +208,5 @@ public class Ex1 {
         }
         return maxIndex;
     }
-    
-    
+
 }

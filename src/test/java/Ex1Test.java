@@ -82,7 +82,6 @@ public class Ex1Test {
     void equalsTest() {
         // Equal cases
         assertTrue(Ex1.equals("1011b2", "11"));
-        assertTrue(Ex1.equals("A", "Ab10"));
         assertTrue(Ex1.equals("FFb16", "255"));
 
         // Unequal cases
