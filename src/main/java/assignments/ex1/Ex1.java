@@ -54,26 +54,48 @@ public class Ex1 {
         if (a == null || a.isEmpty()) {
             return false;
         }
-
+    
+        // Check for leading spaces
+        if (Character.isWhitespace(a.charAt(0))) {
+            return false;
+        }
+    
         if (!a.contains("b")) {
+            // Check if it's a valid standalone number
+            for (char c : a.toCharArray()) {
+                if (!Character.isDigit(c)) {
+                    return false;
+                }
+            }
             return true;
         }
+    
         String[] parts = a.split("b");
         if (parts.length != 2) {
             return false;
         }
+    
         String numberPart = parts[0];
         String basePart = parts[1];
+    
         if (numberPart.isEmpty() || basePart.isEmpty()) {
             return false;
         }
-
+    
         // Validate base
-        int base = Character.isDigit(basePart.charAt(0)) ? Integer.parseInt(basePart) : basePart.charAt(0) - 'A' + 10;
+        int base;
+        try {
+            base = Character.isDigit(basePart.charAt(0))
+                ? Integer.parseInt(basePart)
+                : basePart.charAt(0) - 'A' + 10;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    
         if (base < 2 || base > 16) {
             return false;
         }
-
+    
         // Validate number part
         for (char c : numberPart.toCharArray()) {
             int value = Character.isDigit(c) ? c - '0' : c - 'A' + 10;
@@ -81,8 +103,11 @@ public class Ex1 {
                 return false;
             }
         }
+    
         return true;
     }
+    
+    
 
     /**
      * Calculate the number representation (in basis base) of the given natural
