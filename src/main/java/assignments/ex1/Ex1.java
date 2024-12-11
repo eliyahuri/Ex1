@@ -98,6 +98,9 @@ public class Ex1 {
     
         // Validate number part
         for (char c : numberPart.toCharArray()) {
+            if (!Character.isLetterOrDigit(c)) {
+                return false; // Reject non-alphanumeric characters
+            }
             int value = Character.isDigit(c) ? c - '0' : c - 'A' + 10;
             if (value >= base) {
                 return false;
@@ -106,6 +109,7 @@ public class Ex1 {
     
         return true;
     }
+    
     
     
 
