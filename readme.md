@@ -2,7 +2,7 @@
 
 This is my solution to Assignment 1 in the Java course at Ariel University. The goal was to create a number formatting converter and calculator for bases 2 to 16.
 
-The project uses Maven for JUnit integration, as I faced issues running tests without it.
+The project uses Maven for JUnit integration, as I faced issues running tests in intelij without it. (and even then i couldn't use intelij to run junit so i used vscode) 
 
 Below is a gif showcasing my battle with JUnit:
 
